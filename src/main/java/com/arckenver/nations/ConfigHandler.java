@@ -141,6 +141,11 @@ public class ConfigHandler
 		{
 			Utils.ensureString(config.getNode("whitelist", "spawn").getAppendedNode(), "modname:entity");
 		}
+
+		if (!config.getNode("blacklist", "entity").hasListChildren() || config.getNode("blacklist", "entity").getChildrenList().isEmpty())
+		{
+			Utils.ensureString(config.getNode("blacklist", "entity").getAppendedNode(), "modname:entity");
+		}
 		
 		if (config.getNode("others", "enableNationRanks").getBoolean())
 		{
@@ -250,6 +255,16 @@ public class ConfigHandler
 		if (!config.getNode("whitelist", type).hasListChildren())
 			return false;
 		for (CommentedConfigurationNode item : config.getNode("whitelist", type).getChildrenList()) {
+			if (id.startsWith(item.getString()))
+				return true;
+		}
+		return false;
+	}
+
+	public static boolean isBlackListed(String type, String id) {
+		if (!config.getNode("blacklist", type).hasListChildren())
+			return false;
+		for (CommentedConfigurationNode item : config.getNode("blacklist", type).getChildrenList()) {
 			if (id.startsWith(item.getString()))
 				return true;
 		}
